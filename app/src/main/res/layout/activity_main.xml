@@ -31,4 +31,9 @@
         android:text="Legacy Camera (KitKat 4.4 and older)"
         style="@style/Button" />
 
+    <Button
+        android:id="@+id/btn_edit_picture"
+        android:text="Picture Edit (Original)"
+        style="@style/Button" />
+
 </LinearLayout>
