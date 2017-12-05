@@ -41,4 +41,9 @@
         android:text="Picture Edit (New)"
         style="@style/Button" />
 
+    <Button
+        android:id="@+id/btn_collage_camera"
+        android:text="Collage camera"
+        style="@style/Button" />
+
 </LinearLayout>

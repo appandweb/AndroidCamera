@@ -40,6 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        findViewById(R.id.btn_collage_camera).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchCollageCamera();
+            }
+        });
+
         findViewById(R.id.btn_original_edit_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,5 +114,9 @@ public class MainActivity extends AppCompatActivity {
         File f = new File(this.getExternalFilesDir(null), "pic.jpg");
         CropImage.activity(Uri.fromFile(f))
                 .start(this);
+    }
+
+    protected void launchCollageCamera() {
+
     }
 }
