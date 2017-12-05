@@ -1,15 +1,18 @@
 package com.appandweb.androidcamera;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+
+import com.theartofdev.edmodo.cropper.CropImage;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.File;
 
 import static com.appandweb.androidcamera.EditPictureActivity.EXTRA_FORCE_FIXED_ASPECT_RATIO;
 import static com.appandweb.androidcamera.EditPictureActivity.EXTRA_PICTURE_FILE;
-import static java.security.AccessController.getContext;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -34,12 +37,18 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        findViewById(R.id.btn_original_edit_picture).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                launchOriginalEditPicture();
+            }
+        });
+
         findViewById(R.id.btn_edit_picture).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 launchEditPicture();
             }
-
         });
     }
 
@@ -53,11 +62,18 @@ public class MainActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    protected void launchEditPicture() {
+    protected void launchOriginalEditPicture() {
         File f = new File(this.getExternalFilesDir(null), "pic.jpg");
         Intent intent = new Intent(this, EditPictureActivity.class);
         intent.putExtra(EXTRA_PICTURE_FILE, f.getAbsolutePath());
         intent.putExtra(EXTRA_FORCE_FIXED_ASPECT_RATIO, false);
         startActivity(intent);
+    }
+
+    protected void launchEditPicture() {
+        File f = new File(this.getExternalFilesDir(null), "pic.jpg");
+        CropImage.activity(Uri.parse(f.getAbsolutePath()))
+                .setGuidelines(CropImageView.Guidelines.ON)
+                .start(this);
     }
 }

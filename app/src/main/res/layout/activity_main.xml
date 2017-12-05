@@ -32,8 +32,13 @@
         style="@style/Button" />
 
     <Button
-        android:id="@+id/btn_edit_picture"
+        android:id="@+id/btn_original_edit_picture"
         android:text="Picture Edit (Original)"
+        style="@style/Button" />
+
+    <Button
+        android:id="@+id/btn_edit_picture"
+        android:text="Picture Edit (New)"
         style="@style/Button" />
 
 </LinearLayout>
