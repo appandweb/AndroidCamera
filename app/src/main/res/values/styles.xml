@@ -33,4 +33,33 @@
         <item name="android:layout_marginTop">0dp</item>
     </style>
 
+    <style name="TransparentButtonBottomPadded" parent="Element">
+        <item name="android:background">@color/transparent</item>
+        <item name="android:layout_marginBottom">16dp</item>
+    </style>
+
+    <style name="EditPictureAcceptButton" parent="TransparentButtonBottomPadded">
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:src">@drawable/accept_button_selector</item>
+        <item name="android:layout_marginRight">16dp</item>
+    </style>
+
+    <style name="EditPictureCancelButton" parent="TransparentButtonBottomPadded">
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:src">@drawable/cancel_button_selector</item>
+        <item name="android:layout_marginLeft">16dp</item>
+    </style>
+
+    <style name="EditPictureRotateButton" parent="TransparentButtonBottomPadded">
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_centerHorizontal">true</item>
+        <item name="android:src">@drawable/rotate_button_selector</item>
+    </style>
+
+    <style name="EditPictureAcceptButton.Invisible">
+        <item name="android:visibility">invisible</item>
+    </style>
+
 </resources>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/FullScreen"
+    android:background="@color/black">
+
+    <com.edmodo.cropper.CropImageView
+        android:id="@+id/picture_edit_img"
+        style="@style/FullScreen"
+        />
+
+    <ProgressBar
+        android:id="@+id/picture_edit_pbr_loading"
+        style="@style/GenericLoadingProgressBar.Invisible" />
+
+    <ImageButton
+        android:id="@+id/picture_edit_btn_accept"
+        style="@style/EditPictureAcceptButton.Invisible"/>
+
+    <ImageButton
+        android:id="@+id/picture_edit_btn_cancel"
+        style="@style/EditPictureCancelButton"
+        />
+
+    <ImageButton
+        android:id="@+id/picture_edit_btn_rotate"
+        style="@style/EditPictureRotateButton"
+        />
+</RelativeLayout>
