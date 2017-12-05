@@ -15,9 +15,9 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.edmodo.cropper.CropImageView;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -135,7 +135,7 @@ public class EditPictureActivity extends AppCompatActivity {
     private void configureCropImageView() {
         cropImageView.setImageResource(R.mipmap.ic_loading_centered);
         cropImageView.setFixedAspectRatio(forceFixedAspectRatio);
-        cropImageView.setGuidelines(1);
+        cropImageView.setGuidelines(CropImageView.Guidelines.ON);
     }
 
     private void loadPicture(String path) {
