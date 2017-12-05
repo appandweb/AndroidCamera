@@ -24,6 +24,7 @@
 
         <activity android:name=".LegacyCameraActivity" />
         <activity android:name=".CustomCameraActivity" />
+        <activity android:name=".EditPictureActivity" />
     </application>
 
 </manifest>

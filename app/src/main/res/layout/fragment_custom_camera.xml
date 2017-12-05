@@ -44,6 +44,11 @@
             style="@style/CropButton"
             android:src="@android:drawable/ic_menu_crop" />
 
+        <ImageButton
+            android:id="@+id/edit"
+            style="@style/EditButton"
+            android:src="@android:drawable/ic_menu_edit" />
+
     </FrameLayout>
 
 </RelativeLayout>

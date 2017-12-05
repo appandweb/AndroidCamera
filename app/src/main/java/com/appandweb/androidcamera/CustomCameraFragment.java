@@ -6,6 +6,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -61,6 +62,9 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
+
+import static com.appandweb.androidcamera.EditPictureActivity.EXTRA_FORCE_FIXED_ASPECT_RATIO;
+import static com.appandweb.androidcamera.EditPictureActivity.EXTRA_PICTURE_FILE;
 
 @SuppressWarnings("NewApi")
 public class CustomCameraFragment extends Fragment implements View.OnClickListener, ActivityCompat.OnRequestPermissionsResultCallback {
@@ -421,6 +425,7 @@ public class CustomCameraFragment extends Fragment implements View.OnClickListen
     public void onViewCreated(final View view, Bundle savedInstanceState) {
         view.findViewById(R.id.picture).setOnClickListener(this);
         view.findViewById(R.id.crop).setOnClickListener(this);
+        view.findViewById(R.id.edit).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
     }
 
@@ -884,6 +889,14 @@ public class CustomCameraFragment extends Fragment implements View.OnClickListen
                 takePicture();
                 break;
             }
+            case R.id.edit: {
+                File f = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
+                Intent intent = new Intent(getContext(), EditPictureActivity.class);
+                intent.putExtra(EXTRA_PICTURE_FILE, f.getAbsolutePath());
+                intent.putExtra(EXTRA_FORCE_FIXED_ASPECT_RATIO, false);
+                startActivity(intent);
+            }
+            break;
             case R.id.crop: {
                 File f = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
                 File out = new File(getActivity().getExternalFilesDir(null), "cropped.jpg");

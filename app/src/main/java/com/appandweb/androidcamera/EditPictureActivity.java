@@ -15,6 +15,10 @@ import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.edmodo.cropper.CropImageView;
+import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
+
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -49,7 +53,6 @@ public class EditPictureActivity extends AppCompatActivity {
         }
     };
 
-    @Override
     public int getLayoutId() {
         return R.layout.activity_edit_picture;
     }

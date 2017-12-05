@@ -28,6 +28,17 @@
         <item name="android:background">@drawable/circle</item>
     </style>
 
+    <style name="EditButton" parent="Element">
+        <item name="android:layout_marginTop">0dp</item>
+        <item name="android:layout_marginRight">16dp</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_gravity">right|center_vertical</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:background">@drawable/circle</item>
+    </style>
+
     <style name="Button.Centered">
         <item name="android:layout_gravity">center</item>
         <item name="android:layout_marginTop">0dp</item>
