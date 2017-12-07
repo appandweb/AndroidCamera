@@ -411,6 +411,28 @@ public class CustomCameraFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    /**
+     * Returns the optimal size for the surface using the width and height of the  destination texture view
+     * @param outputSizes array with all the available sizes in current device
+     * @param width width of the entire screen
+     * @param height height of the entire screen
+     * @return Size object with the optimal size found for current device
+     */
+    private Size chooseOptimalSizeUsingAspectRatio(Size[] outputSizes, int width, int height) {
+        double preferredRatio = height / (double) width;
+        Size currentOptimalSize = outputSizes[0];
+        double currentOptimalRatio = currentOptimalSize.getWidth() / (double) currentOptimalSize.getHeight();
+        for (Size currentSize : outputSizes) {
+            double currentRatio = currentSize.getWidth() / (double) currentSize.getHeight();
+            if (Math.abs(preferredRatio - currentRatio) <
+                    Math.abs(preferredRatio - currentOptimalRatio)) {
+                currentOptimalSize = currentSize;
+                currentOptimalRatio = currentRatio;
+            }
+        }
+        return currentOptimalSize;
+    }
+
     public static CustomCameraFragment newInstance() {
         return new CustomCameraFragment();
     }
