@@ -1077,9 +1077,9 @@ public class CustomCameraFragment extends Fragment implements View.OnClickListen
     }
 
     //region Fragment Callbacks
-    Callbacks listener = new EmptyListener();
+    CameraListener listener = new EmptyListener();
 
-    public void setListener(Callbacks listener) {
+    public void setListener(CameraListener listener) {
         if (listener != null)
             this.listener = listener;
     }
@@ -1090,7 +1090,7 @@ public class CustomCameraFragment extends Fragment implements View.OnClickListen
         void onPictureError(Exception e);
     }
 
-    private class EmptyListener implements Callbacks {
+    private class EmptyListener implements CameraListener {
         public void onPictureTaken(File pictureFile) {
         }
 

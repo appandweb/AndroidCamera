@@ -13,7 +13,7 @@ import java.io.File;
 import static android.hardware.Camera.CameraInfo.CAMERA_FACING_BACK;
 import static android.hardware.Camera.CameraInfo.CAMERA_FACING_FRONT;
 
-public class CustomCameraActivity extends AppCompatActivity implements CustomCameraFragment.Callbacks {
+public class CustomCameraActivity extends AppCompatActivity implements CameraListener {
     public static final String EXTRA_PICTURE_FILE = "pictureFile";
     public static final String EXTRA_CAMERA = "camera";
 
@@ -34,7 +34,8 @@ public class CustomCameraActivity extends AppCompatActivity implements CustomCam
         setContentView(getLayoutId());
 
         int camera = getCameraFromExtras(getIntent());
-        createCameraFragment(camera);
+
+        configureCameraFragment(camera);
     }
 
     private int getCameraFromExtras(Intent intent) {
@@ -54,17 +55,22 @@ public class CustomCameraActivity extends AppCompatActivity implements CustomCam
         }
     }
 
-    private void createCameraFragment(int camera) {
+    protected void configureCameraFragment(int camera) {
+        Fragment f = createCameraFragment(camera);
+        FragmentManager fm = getSupportFragmentManager();
+        fm.beginTransaction()
+                .replace(R.id.custom_camera_root, f)
+                .commit();
+    }
+
+    protected Fragment createCameraFragment(int camera) {
         Bundle args = new Bundle();
         args.putInt(EXTRA_CAMERA, camera);
         Fragment f = Fragment.instantiate(this, CustomCameraFragment.class.getName(), args);
         if (f instanceof CustomCameraFragment) {
             ((CustomCameraFragment) f).setListener(this);
         }
-        FragmentManager fm = getSupportFragmentManager();
-        fm.beginTransaction()
-                .replace(R.id.custom_camera_root, f)
-                .commit();
+        return f;
     }
 
     @Override
@@ -74,13 +80,13 @@ public class CustomCameraActivity extends AppCompatActivity implements CustomCam
         Intent data = new Intent();
         data.putExtra(EXTRA_PICTURE_FILE, picturePath);
 
-        setResult(Activity.RESULT_OK, data);
+        setResult(RESULT_OK, data);
         finish();
     }
 
     @Override
     public void onPictureError(Exception e) {
-        setResult(Activity.RESULT_CANCELED);
+        setResult(RESULT_CANCELED);
         finish();
     }
 }

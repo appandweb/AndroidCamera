@@ -117,6 +117,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     protected void launchCollageCamera() {
-
+        Intent intent = new Intent(this, CollageCameraActivity.class);
+        startActivity(intent);
     }
 }

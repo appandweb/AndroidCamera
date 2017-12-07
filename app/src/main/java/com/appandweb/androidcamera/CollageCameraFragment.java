@@ -45,7 +45,6 @@ import android.util.Size;
 import android.view.Display;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
@@ -106,13 +105,14 @@ public class CollageCameraFragment extends Fragment {
     private int screenWidth;
     private int screenHeight;
 
+    CameraListener listener = new EmptyListener();
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         screenWidth = getScreenSize().x;
         screenHeight = getScreenSize().y;
-
 
         requestPermissions(new String[]{Manifest.permission.CAMERA,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE},
@@ -162,7 +162,6 @@ public class CollageCameraFragment extends Fragment {
         return size;
     }
 
-
     private CameraDevice.StateCallback initStateCallback() {
         return new CameraDevice.StateCallback() {
             @Override
@@ -208,6 +207,15 @@ public class CollageCameraFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 captureImage();
+            }
+        });
+
+        uploadPhotoButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getContext(), String.format("Picture taken: %s", imageFile.getAbsolutePath()), Toast.LENGTH_LONG).show();
+
+                listener.onPictureTaken(imageFile);
             }
         });
 
@@ -300,12 +308,6 @@ public class CollageCameraFragment extends Fragment {
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
 
     }
-
-//    @Override
-//    public void onPrepareOptionsMenu(Menu menu) {
-//        super.onPrepareOptionsMenu(menu);
-//        searchMenuItem.setVisible(false);
-//    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -536,5 +538,26 @@ public class CollageCameraFragment extends Fragment {
         String imageFileName = "image_" + timeStamp + "_";
         return File.createTempFile(imageFileName, ".jpg", galleryFolder);
     }
+
+    //region Camera Listener
+
+    public void setListener(CameraListener listener) {
+        if (listener != null)
+            this.listener = listener;
+    }
+
+    private class EmptyListener implements CameraListener {
+        @Override
+        public void onPictureTaken(File pictureFile) {
+            /* Empty */
+        }
+
+        @Override
+        public void onPictureError(Exception e) {
+            /* Empty */
+        }
+    }
+
+    //endregion
 }
 

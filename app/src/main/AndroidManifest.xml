@@ -27,6 +27,7 @@
         <activity android:name=".LegacyCameraActivity" />
         <activity android:name=".CustomCameraActivity" />
         <activity android:name=".EditPictureActivity" />
+        <activity android:name=".CollageCameraActivity" />
         <activity android:name="com.theartofdev.edmodo.cropper.CropImageActivity" android:theme="@style/Base.Theme.AppCompat"/>
     </application>
 

@@ -26,7 +26,7 @@ import java.util.Date;
 import java.util.List;
 
 import static android.hardware.Camera.CameraInfo.CAMERA_FACING_BACK;
-import static com.appandweb.androidcamera.LegacyCameraActivity.EXTRA_CAMERA;
+import static com.appandweb.androidcamera.CustomCameraActivity.EXTRA_CAMERA;
 
 public class LegacyCameraFragment extends Fragment {
     // Native camera.
@@ -104,7 +104,7 @@ public class LegacyCameraFragment extends Fragment {
         } else {
             cameraId = Camera.CameraInfo.CAMERA_FACING_FRONT;
         }
-        //safeCameraOpenInView(cameraView);
+
         camera = Camera.open(cameraId);
         setCameraDisplayOrientation(getActivity(), cameraId, camera);
         try {
@@ -530,26 +530,24 @@ public class LegacyCameraFragment extends Fragment {
     }
 
     //region Fragment Callbacks
-    Callbacks listener = new EmptyListener();
 
-    public void setListener(Callbacks listener) {
+    CameraListener listener = new EmptyListener();
+
+    public void setListener(CameraListener listener) {
         if (listener != null)
             this.listener = listener;
     }
 
-    public interface Callbacks {
-        void onPictureTaken(File pictureFile);
-
-        void onPictureError(Exception e);
-    }
-
-    private class EmptyListener implements Callbacks {
+    private class EmptyListener implements CameraListener {
         public void onPictureTaken(File pictureFile) {
+            /* Empty */
         }
 
         public void onPictureError(Exception e) {
+            /* Empty */
         }
     }
+
     //endregion
 
     //region Raw Picture Callback
