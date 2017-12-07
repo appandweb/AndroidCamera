@@ -8,10 +8,12 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Paint;
@@ -48,6 +50,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import java.io.ByteArrayOutputStream;
@@ -132,6 +135,7 @@ public class CustomCameraFragment extends Fragment implements View.OnClickListen
 
         @Override
         public void onSurfaceTextureAvailable(SurfaceTexture texture, int width, int height) {
+            //setUpCamera
             openCamera(width, height);
         }
 
@@ -156,12 +160,16 @@ public class CustomCameraFragment extends Fragment implements View.OnClickListen
      */
     private String mCameraId;
 
+    private int cameraFacing = CameraCharacteristics.LENS_FACING_BACK;
+
     /**
      * An {@link AutoFitTextureView} for camera preview.
      */
     private AutoFitTextureView mTextureView;
 
     private View mFrameView;
+    private View controlPanelView;
+    private ImageButton shutterButton;
 
     /**
      * A {@link CameraCaptureSession } for camera preview.
@@ -362,6 +370,10 @@ public class CustomCameraFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    int shutterIconResId = R.mipmap.ic_camera_shutter;
+    int shutterIconColor = Color.RED;
+    int panelBackgroundColor = Color.DKGRAY;
+
     /**
      * Given {@code choices} of {@code Size}s supported by a camera, choose the smallest one that
      * is at least as large as the respective texture view size, and that is at most as large as the
@@ -413,9 +425,10 @@ public class CustomCameraFragment extends Fragment implements View.OnClickListen
 
     /**
      * Returns the optimal size for the surface using the width and height of the  destination texture view
+     *
      * @param outputSizes array with all the available sizes in current device
-     * @param width width of the entire screen
-     * @param height height of the entire screen
+     * @param width       width of the entire screen
+     * @param height      height of the entire screen
      * @return Size object with the optimal size found for current device
      */
     private Size chooseOptimalSizeUsingAspectRatio(Size[] outputSizes, int width, int height) {
@@ -433,8 +446,9 @@ public class CustomCameraFragment extends Fragment implements View.OnClickListen
         return currentOptimalSize;
     }
 
-    public static CustomCameraFragment newInstance() {
-        return new CustomCameraFragment();
+    public static CustomCameraFragment newInstance(int shutterIconResId, int shutterIconColor, int shutterBackgroundColor) {
+        CustomCameraFragment f = new CustomCameraFragment();
+        return f;
     }
 
     @Override
@@ -445,10 +459,17 @@ public class CustomCameraFragment extends Fragment implements View.OnClickListen
 
     @Override
     public void onViewCreated(final View view, Bundle savedInstanceState) {
-        view.findViewById(R.id.picture).setOnClickListener(this);
+        controlPanelView = view.findViewById(R.id.controlPanel);
+        shutterButton = view.findViewById(R.id.picture);
+
+        shutterButton.setOnClickListener(this);
         view.findViewById(R.id.crop).setOnClickListener(this);
         view.findViewById(R.id.edit).setOnClickListener(this);
         mTextureView = (AutoFitTextureView) view.findViewById(R.id.texture);
+
+        shutterButton.setImageResource(shutterIconResId);
+        shutterButton.setImageTintList(ColorStateList.valueOf(shutterIconColor));
+        controlPanelView.setBackgroundColor(panelBackgroundColor);
     }
 
     @Override
@@ -516,9 +537,8 @@ public class CustomCameraFragment extends Fragment implements View.OnClickListen
                 CameraCharacteristics characteristics
                         = manager.getCameraCharacteristics(cameraId);
 
-                // We don't use a front facing camera in this sample.
-                Integer facing = characteristics.get(CameraCharacteristics.LENS_FACING);
-                if (facing != null && facing == CameraCharacteristics.LENS_FACING_FRONT) {
+                int facing = characteristics.get(CameraCharacteristics.LENS_FACING);
+                if (facing != cameraFacing) {
                     continue;
                 }
 
@@ -920,27 +940,32 @@ public class CustomCameraFragment extends Fragment implements View.OnClickListen
             }
             break;
             case R.id.crop: {
-                File f = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
-                File out = new File(getActivity().getExternalFilesDir(null), "cropped.jpg");
-                try {
-                    Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
-                    Bitmap cropped = cropBitmap(bitmap);
-                    ByteArrayOutputStream bos = new ByteArrayOutputStream();
-                    cropped.compress(Bitmap.CompressFormat.PNG, 0, bos);
-                    byte[] bitmapdata = bos.toByteArray();
-
-//write the bytes in file
-                    FileOutputStream fos = new FileOutputStream(out);
-                    fos.write(bitmapdata);
-                    fos.flush();
-                    fos.close();
-                } catch (OutOfMemoryError e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                swapCamera();
+                //cropAndWriteImage();
             }
             break;
+        }
+    }
+
+    private void cropAndWriteImage() {
+        File f = new File(getActivity().getExternalFilesDir(null), "pic.jpg");
+        File out = new File(getActivity().getExternalFilesDir(null), "cropped.jpg");
+        try {
+            Bitmap bitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
+            Bitmap cropped = cropBitmap(bitmap);
+            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+            cropped.compress(Bitmap.CompressFormat.PNG, 0, bos);
+            byte[] bitmapdata = bos.toByteArray();
+
+//write the bytes in file
+            FileOutputStream fos = new FileOutputStream(out);
+            fos.write(bitmapdata);
+            fos.flush();
+            fos.close();
+        } catch (OutOfMemoryError e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -1073,6 +1098,24 @@ public class CustomCameraFragment extends Fragment implements View.OnClickListen
         }
     }
 
+    public void swapCamera() {
+        closeCamera();
+
+        if (cameraFacing == CameraCharacteristics.LENS_FACING_BACK) {
+            cameraFacing = CameraCharacteristics.LENS_FACING_FRONT;
+        } else if (cameraFacing == CameraCharacteristics.LENS_FACING_FRONT) {
+            cameraFacing = CameraCharacteristics.LENS_FACING_BACK;
+        }
+
+        if (mTextureView.isAvailable()) {
+            int width = mTextureView.getWidth();
+            int height = mTextureView.getHeight();
+            setUpCameraOutputs(width, height);
+            openCamera(width, height);
+        } else {
+            mTextureView.setSurfaceTextureListener(mSurfaceTextureListener);
+        }
+    }
 
     public static Bitmap cropBitmap(@NonNull Bitmap bitmap) {
         int width = bitmap.getWidth();

@@ -199,7 +199,7 @@ public class CollageCameraFragment extends Fragment {
         switchCameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                switchCamera();
+                swapCamera();
             }
         });
 
@@ -478,7 +478,7 @@ public class CollageCameraFragment extends Fragment {
         });
     }
 
-    public void switchCamera() {
+    public void swapCamera() {
         closeCamera();
 
         if (cameraFacing == CameraCharacteristics.LENS_FACING_BACK) {

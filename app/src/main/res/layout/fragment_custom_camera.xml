@@ -26,7 +26,7 @@
         android:layout_alignParentTop="true" />
 
     <FrameLayout
-        android:id="@+id/control"
+        android:id="@+id/controlPanel"
         android:layout_width="match_parent"
         android:layout_height="112dp"
         android:layout_alignParentBottom="true"
@@ -34,15 +34,19 @@
         android:layout_alignParentLeft="true"
         android:background="@color/colorPrimaryDark">
 
-        <Button
+        <ImageButton
             android:id="@+id/picture"
             style="@style/Button.Centered"
+            android:layout_height="88dp"
+            android:layout_width="88dp"
+            android:src="@mipmap/ic_camera_shutter"
+            android:background="@drawable/camera_shutter_selector"
             android:text="Picture" />
 
         <ImageButton
             android:id="@+id/crop"
             style="@style/CropButton"
-            android:src="@android:drawable/ic_menu_crop" />
+            android:src="@mipmap/ic_rotate_camera" />
 
         <ImageButton
             android:id="@+id/edit"
